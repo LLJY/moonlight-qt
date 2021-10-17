@@ -161,8 +161,6 @@ GlobalCommandLineParser::ParseResult GlobalCommandLineParser::parse(const QStrin
     parser.setupCommonOptions();
     parser.setApplicationDescription(
         "\n"
-        "Starts Moonlight normally if no arguments are given.\n"
-        "\n"
         "Available actions:\n"
         "  quit            Quit the currently running app\n"
         "  stream          Start streaming an app\n"
@@ -176,9 +174,7 @@ GlobalCommandLineParser::ParseResult GlobalCommandLineParser::parse(const QStrin
     if (posArgs.isEmpty()) {
         // This method will not return and terminates the process if --version
         // or --help is specified
-        parser.handleHelpAndVersionOptions();
-        parser.handleUnknownOptions();
-        return NormalStartRequested;
+        parser.showHelp();
     }
     else {
         // If users supply arguments that accept values prior to the "quit"
