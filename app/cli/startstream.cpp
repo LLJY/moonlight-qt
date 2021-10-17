@@ -2,6 +2,8 @@
 #include "backend/computermanager.h"
 #include "backend/computerseeker.h"
 #include "streaming/session.h"
+#include "backend/nvpairingmanager.h"
+
 
 #include <QCoreApplication>
 #include <QTimer>
@@ -85,11 +87,18 @@ public:
                     m_TimeoutTimer->start(APP_SEEK_TIMEOUT);
                     emit q->searchingApp();
                 } else {
-                    m_State = StateFailure;
-                    QString msg = QObject::tr("Computer %1 has not been paired. "
-                                              "Please open Moonlight to pair before streaming.")
-                            .arg(event.computer->name);
-                    emit q->failed(msg);
+                    m_Computer = event.computer;
+                    NvPairingManager pairingManager(m_Computer);
+                    NvPairingManager::PairState result = pairingManager.pair(m_Computer->appVersion, "1234", m_Computer->serverCert);
+                    
+                    m_State = StateSeekApp;
+                    m_TimeoutTimer->start(APP_SEEK_TIMEOUT);
+                    emit q->searchingApp();
+                    // m_State = StateFailure;
+                    // QString msg = QObject::tr("Computer %1 has not been paired. "
+                    //                           "Please open Moonlight to pair before streaming.")
+                    //         .arg(event.computer->name);
+                    // emit q->failed(msg);
                 }
             }
             break;
