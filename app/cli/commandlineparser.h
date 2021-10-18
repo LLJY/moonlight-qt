@@ -9,7 +9,6 @@ class GlobalCommandLineParser
 {
 public:
     enum ParseResult {
-        NormalStartRequested,
         StreamRequested,
         QuitRequested,
     };
