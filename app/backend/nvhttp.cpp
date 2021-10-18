@@ -53,6 +53,8 @@ void NvHTTP::setAddress(NvAddress address)
 
     m_BaseUrlHttp.setHost(address.address());
     m_BaseUrlHttps.setHost(address.address());
+    m_BaseSunshineServer = m_BaseUrlHttps;
+    m_BaseSunshineServer.setPort(47990);
 
     m_BaseUrlHttp.setPort(address.port());
 }

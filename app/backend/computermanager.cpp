@@ -471,7 +471,7 @@ private:
         NvPairingManager pairingManager(m_Computer);
 
         try {
-           NvPairingManager::PairState result = pairingManager.pair(m_Computer->appVersion, m_Pin, m_Computer->serverCert);
+           NvPairingManager::PairState result = pairingManager.pair(m_Computer->appVersion, m_Computer->serverCert);
            switch (result)
            {
            case NvPairingManager::PairState::PIN_WRONG:

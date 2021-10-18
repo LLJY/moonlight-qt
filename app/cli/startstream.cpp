@@ -89,7 +89,7 @@ public:
                 } else {
                     m_Computer = event.computer;
                     NvPairingManager pairingManager(m_Computer);
-                    NvPairingManager::PairState result = pairingManager.pair(m_Computer->appVersion, "1234", m_Computer->serverCert);
+                    NvPairingManager::PairState result = pairingManager.pair(m_Computer->appVersion, m_Computer->serverCert);
                     
                     m_State = StateSeekApp;
                     m_TimeoutTimer->start(APP_SEEK_TIMEOUT);

@@ -8,6 +8,8 @@
 #include <openssl/pem.h>
 #include <openssl/x509.h>
 #include <openssl/evp.h>
+#include <random>
+
 
 #define REQUEST_TIMEOUT_MS 5000
 
@@ -188,8 +190,16 @@ NvPairingManager::saltPin(const QByteArray& salt, QString pin)
 }
 
 NvPairingManager::PairState
-NvPairingManager::pair(QString appVersion, QString pin, QSslCertificate& serverCert)
+NvPairingManager::pair(QString appVersion, QSslCertificate& serverCert)
 {
+    std::uniform_int_distribution<int> dist(0, 9999);
+    std::random_device rd;
+    std::mt19937 engine(rd());
+
+    QString pin = QString::asprintf("%04u", dist(engine));
+
+    qInfo() << "Pairing PIN:" << pin;
+
     int serverMajorVersion = NvHTTP::parseQuad(appVersion).at(0);
     qInfo() << "Pairing with server generation:" << serverMajorVersion;
 

@@ -185,6 +185,7 @@ public:
 
     QUrl m_BaseUrlHttp;
     QUrl m_BaseUrlHttps;
+    QUrl m_BaseSunshineServer;
 private:
     void
     handleSslErrors(QNetworkReply* reply, const QList<QSslError>& errors);

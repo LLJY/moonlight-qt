@@ -22,7 +22,7 @@ public:
     ~NvPairingManager();
 
     PairState
-    pair(QString appVersion, QString pin, QSslCertificate& serverCert);
+    pair(QString appVersion, QSslCertificate& serverCert);
 
 private:
     QByteArray
