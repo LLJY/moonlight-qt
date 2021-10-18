@@ -570,9 +570,6 @@ int main(int argc, char *argv[])
 
     GlobalCommandLineParser parser;
     switch (parser.parse(app.arguments())) {
-    case GlobalCommandLineParser::NormalStartRequested:
-        initialView = "qrc:/gui/PcView.qml";
-        break;
     case GlobalCommandLineParser::StreamRequested:
         {
             initialView = "qrc:/gui/CliStartStreamSegue.qml";
