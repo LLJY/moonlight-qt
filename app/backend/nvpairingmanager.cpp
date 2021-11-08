@@ -1,4 +1,5 @@
 #include "nvpairingmanager.h"
+#include "../settings/streamingpreferences.h"
 #include "utils.h"
 
 #include <stdexcept>
@@ -12,6 +13,8 @@
 
 
 #define REQUEST_TIMEOUT_MS 5000
+
+extern QString authenticationPin;
 
 NvPairingManager::NvPairingManager(NvComputer* computer) :
     m_Http(computer)
@@ -192,16 +195,21 @@ NvPairingManager::saltPin(const QByteArray& salt, QString pin)
 NvPairingManager::PairState
 NvPairingManager::pair(QString appVersion, QSslCertificate& serverCert)
 {
-    std::uniform_int_distribution<int> dist(0, 9999);
-    std::random_device rd;
-    std::mt19937 engine(rd());
-
-    QString pin = QString::asprintf("%04u", dist(engine));
+    QString pin = authenticationPin;
+    if(authenticationPin.isEmpty() ){
+        std::uniform_int_distribution<int> dist(0, 9999);
+        std::random_device rd;
+        std::mt19937 engine(rd());
+        pin = QString::asprintf("%04u", dist(engine));
+    }else{
+        pin = authenticationPin;
+    }
 
     qInfo() << "Pairing PIN:" << pin;
 
     int serverMajorVersion = NvHTTP::parseQuad(appVersion).at(0);
     qInfo() << "Pairing with server generation:" << serverMajorVersion;
+
 
     QCryptographicHash::Algorithm hashAlgo;
     int hashLength;

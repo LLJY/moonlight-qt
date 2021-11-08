@@ -2,10 +2,12 @@
 
 #include <QCommandLineParser>
 #include <QRegularExpression>
-
+#include "../settings/streamingpreferences.h"
 #if defined(Q_OS_WIN)
 #include <qt_windows.h>
 #endif
+
+QString authenticationPin;
 
 static bool inRange(int value, int min, int max)
 {
@@ -90,6 +92,11 @@ public:
             showError(QString("Invalid %1 value: %2").arg(name, value(name)));
         }
         return intValue;
+    }
+
+    QString getStringOption(QString name) const
+    {
+        return value(name);
     }
 
     bool getToggleOptionValue(QString name, bool defaultValue) const
@@ -311,6 +318,7 @@ void StreamCommandLineParser::parse(const QStringList &args, StreamingPreference
     parser.addChoiceOption("capture-system-keys", "capture system key combos", m_CaptureSysKeysModeMap.keys());
     parser.addChoiceOption("video-codec", "video codec", m_VideoCodecMap.keys());
     parser.addChoiceOption("video-decoder", "video decoder", m_VideoDecoderMap.keys());
+    parser.addValueOption("authentication-pin", "custom authentication PIN to authenticate with the server");
 
     if (!parser.parse(args)) {
         parser.showError(parser.errorText());
@@ -432,6 +440,10 @@ void StreamCommandLineParser::parse(const QStringList &args, StreamingPreference
     // Resolve --video-decoder option
     if (parser.isSet("video-decoder")) {
         preferences->videoDecoderSelection = mapValue(m_VideoDecoderMap, parser.getChoiceOptionValue("video-decoder"));
+    }
+
+    if(parser.isSet("authentication-pin")){
+        authenticationPin = parser.getStringOption("authentication-pin");
     }
 
     // This method will not return and terminates the process if --version or
